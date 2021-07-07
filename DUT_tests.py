@@ -235,7 +235,7 @@ class DataRecExample(QThread):
     def run(self):
         self.btns_signal.emit(False)
         self.chk_signal.emit(DATA_REC_EXAMPLE, GREENARROW)
-        self.test_signal.emit("This records some data from the HP3458...\n", REPLACE)
+        self.test_signal.emit("Data from HP3458...\n", REPLACE)
 
         hp = settings.instruments['HP3458']
         hp.write('PRESET NORM')
