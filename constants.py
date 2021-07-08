@@ -15,14 +15,14 @@ DC205 = 1
 Chamber = 2
 
 BUTTON_LIST = [{'label': 'Instruction', 'function': 'InstructionExample'},
-               #{'label': 'Text input', 'function': 'TextInputExample'},
-               #{'label': 'Data plot', 'function': 'DataPlotExample'},
+               {'label': 'Text input', 'function': 'TextInputExample'},
+               {'label': 'Data plot', 'function': 'DataPlotExample'},
                {'label': 'Data recording', 'function': 'DataRecExample'},]
 
 INSTRUCTION_EXAMPLE = 0
-#TEXT_INPUT_EXAMPLE = 1
-#DATA_PLOT_EXAMPLE = 2
-DATA_REC_EXAMPLE = 1
+TEXT_INPUT_EXAMPLE = 1
+DATA_PLOT_EXAMPLE = 2
+DATA_REC_EXAMPLE = 3
 
 UNCHECKED = 0
 CHECKED = 1
@@ -51,6 +51,7 @@ APPEND = 'a'
 
 SERIAL_NUM_WRITE = 1
 
+Data_File_Name = "DC205 Drift_testResult.txt"
 
 #
 #   Scavenger related constants below...
