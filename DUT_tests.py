@@ -18,6 +18,7 @@ import random
 import numpy as np
 from constants import *
 import settings
+import Measure_Voltage
 from interfacesnew import *
 from multiprocessing import Process
 import matplotlib
@@ -232,43 +233,129 @@ class DataRecExample(QThread):
     chk_signal = pyqtSignal(int, int)  # This signal is for updating the check-box status associated with the test's button
     plot_signal = pyqtSignal()
 
+
+
     def run(self):
         self.btns_signal.emit(False)
         self.chk_signal.emit(DATA_REC_EXAMPLE, GREENARROW)
         self.test_signal.emit("Data from HP3458...\n", REPLACE)
 
+
+        """
         hp = settings.instruments['HP3458']
         hp.write('PRESET NORM')
         hp.write('NPLC 1')
+        dc205 = settings.instruments['DC205']
 
         settings.plotdata = [] # This is a global container for the data to plot
-        x_data = range(0, 10)
-        settings.plotdata.append(x_data)
+        op = range (9)
         y0_data = []
-        for x in x_data:
-            y = float(hp.read())
-            y0_data.append(y)
-            self.test_signal.emit(f'{y}', APPEND)
-            time.sleep(0.1)
+        soak = 0.5    #wait time for output to be stable
+        for ops in op:
+            if ops == 0:
+                dc205.write("sout 0")
+                dc205.write("rnge 2")
+                dc205.write("volt 100")
+                dc205.write("sout 1")
+                time.sleep(soak)
+                y = float(hp.read())
+                y0_data.append(y)
+                self.test_signal.emit(f'{y}', APPEND)
+
+            if ops == 1:
+                dc205.write("volt 0")
+                time.sleep(soak)
+                y = float(hp.read())
+                y0_data.append(y)
+                self.test_signal.emit(f'{y}', APPEND)
+
+            if ops == 2:
+                dc205.write("volt -100")
+                time.sleep(soak)
+                y = float(hp.read())
+                y0_data.append(y)
+                self.test_signal.emit(f'{y}', APPEND)
+
+            if ops == 3:
+                dc205.write("sout 0")
+                dc205.write("rnge 1")
+                dc205.write("volt 10")
+                dc205.write("sout 1")
+                time.sleep(soak)
+                y = float(hp.read())
+                y0_data.append(y)
+                self.test_signal.emit(f'{y}', APPEND)
+
+            if ops == 4:
+                dc205.write("volt 0")
+                time.sleep(soak)
+                y = float(hp.read())
+                y0_data.append(y)
+                self.test_signal.emit(f'{y}', APPEND)
+
+            if ops == 5:
+                dc205.write("volt -10")
+                time.sleep(soak)
+                y = float(hp.read())
+                y0_data.append(y)
+                self.test_signal.emit(f'{y}', APPEND)
+
+            if ops == 6:
+                dc205.write("sout 0")
+                dc205.write("rnge 0")
+                dc205.write("volt 1")
+                dc205.write("sout 1")
+                time.sleep(soak)
+                y = float(hp.read())
+                y0_data.append(y)
+                self.test_signal.emit(f'{y}', APPEND)
+
+            if ops == 7:
+                dc205.write("volt 0")
+                time.sleep(soak)
+                y = float(hp.read())
+                y0_data.append(y)
+                self.test_signal.emit(f'{y}', APPEND)
+
+            if ops == 8:
+                dc205.write("volt -1")
+                time.sleep(soak)
+                y = float(hp.read())
+                y0_data.append(y)
+                self.test_signal.emit(f'{y}', APPEND)
+                dc205.write("sout 0")
+
+        print(f'y0_data = {y0_data}')
+        x0_data = range(len(y0_data))
+        settings.plotdata.append(x0_data)
         settings.plotdata.append(y0_data)
-        print(y0_data)
 
-#y1_data is a manipulated data example
-        y1_data = []
-        avg_num = 10
-        for i in range(len(y0_data)):
-            y = 0
-            for j in range(avg_num):
-                if i+j < len(y0_data):
-                    y += y0_data[i+j]
-                else:
-                    y += y0_data[j]
-            y /= avg_num
-            y1_data.append(y)
-
-        settings.plotdata.append(y1_data)
 
         self.plot_signal.emit() # This initiates the plot window
+
+
+        self.btns_signal.emit(True)
+        result = True
+        if result:
+            icon = CHECKED
+        else:
+            icon = REDX
+        self.chk_signal.emit(DATA_REC_EXAMPLE, icon)
+        """
+
+        file1 = open(Data_File_Name, "a")
+        file1.write(f'\r\nDC205 Test Date,          Temp(degC),      Range2 +100V,      0V,       -100V,      Range1 +10V,        0V,       -10V,           Range0 +1V,          0V,         -1V\r')  # add items to be measured
+        file1.close()
+
+        Measure_Voltage.set_dc205_voltage_measure_with_3458a(self, 45)
+        time.sleep(1) #delay 1hour for chamber to be stable
+        Measure_Voltage.set_dc205_voltage_measure_with_3458a(self, 35)
+        time.sleep(1)  # delay 1hour for chamber to be stable
+        Measure_Voltage.set_dc205_voltage_measure_with_3458a(self, 25)
+        time.sleep(1)  # delay 1hour for chamber to be stable
+        Measure_Voltage.set_dc205_voltage_measure_with_3458a(self, 15)
+        time.sleep(1)  # delay 1hour for chamber to be stable
+        Measure_Voltage.set_dc205_voltage_measure_with_3458a(self, 5)
 
         self.btns_signal.emit(True)
         result = True
