@@ -214,7 +214,7 @@ class Ui_MainWindow(QMainWindow):
                     if qry.find('CS580') > -1:
                         self.connectionList.append(INSTRUMENT_CHKLIST[CS580])
                 except:
-                    print("Error: instrument CS580 not found")
+                    print("Error: CS580 not found")
 
             #print(self.connectionList)
 
