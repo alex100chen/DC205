@@ -19,6 +19,7 @@ def init_globals():
     global plot_data
     global instruments
     global plotdata
+    global hp_34401a
 
     history = []
     for i in range(len(BUTTON_LIST)):

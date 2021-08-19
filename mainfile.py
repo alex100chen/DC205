@@ -39,6 +39,9 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 
+import settings
+
+
 # This method connects to WIP Tracker
 def client(connection_details):
     client = wip_api.ApiClient(**connection_details)
@@ -175,7 +178,7 @@ class Ui_MainWindow(QMainWindow):
         for item in resources:
             if 'GPIB0::22::' in item:
                 resource = rm.open_resource(item)
-                dict = {'HP3458': resource}
+                dict = {'HP3458A': resource}
                 settings.instruments.update(dict)
                 try:
                     resource.write("END ALWAYS")
@@ -184,8 +187,25 @@ class Ui_MainWindow(QMainWindow):
                     #print(qry)
                     if qry.find("HP3458A") > -1:
                         self.connectionList.append(INSTRUMENT_CHKLIST[HP3458A])
+                        settings.hp_34401a = False
                 except:
                     print("Error: instrument HP3458A not found")
+
+            if 'GPIB0::14::' in item:
+                resource = rm.open_resource(item)
+                dict = {'HP34401A': resource}
+                settings.instruments.update(dict)
+                try:
+                    #resource.write("END ALWAYS")
+                    resource.write("*IDN?")
+                    qry = resource.read()
+                    # print(qry)
+                    if qry.find("34401A") > -1:
+                       self.connectionList.append(INSTRUMENT_CHKLIST[HP34401A])
+                       settings.hp_34401a = True
+                except:
+                    print("Error: instrument HP34401A not found")
+
 
             if 'ASRL19::' in item:
                 resource = rm.open_resource(item)
@@ -199,7 +219,8 @@ class Ui_MainWindow(QMainWindow):
                     if qry.find('DC205') > -1:
                         self.connectionList.append(INSTRUMENT_CHKLIST[DC205])
                 except:
-                    print("Error: instrument DC205 not found")
+                    pass
+                    #print("Error: instrument DC205 not found")
 
 
             if 'ASRL5::' in item:

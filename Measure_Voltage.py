@@ -5,9 +5,15 @@ import settings
 
 def set_dc205_voltage_measure_with_3458a(self, temp):
     self.temp = temp
-    hp = settings.instruments['HP3458']
-    hp.write('PRESET NORM')
-    hp.write('NPLC 1')
+
+    if settings.hp_34401a:
+        hp = settings.instruments['HP34401A']  # may use HP3458A
+        hp.write('*CLS')
+    else:
+        hp = settings.instruments['HP3458A']
+        hp.write('PRESET NORM')  # needed for HP3458A
+        hp.write('NPLC 1')  # needed for HP3458A
+
     dc205 = settings.instruments['DC205']
 
     rows, cols = 5, 10
@@ -26,6 +32,8 @@ def set_dc205_voltage_measure_with_3458a(self, temp):
             dc205.write("volt 100")
             dc205.write("sout 1")
             time.sleep(soak)
+            if settings.hp_34401a:
+                hp.write("read?")#remove this command if use HP3458A
             y = float(hp.read())
             y0_data.append(y)
             self.test_signal.emit(f'{y}', APPEND)
@@ -33,6 +41,8 @@ def set_dc205_voltage_measure_with_3458a(self, temp):
         if ops == 1:
             dc205.write("volt 0")
             time.sleep(soak)
+            if settings.hp_34401a:
+                hp.write("read?")  # remove this command if use HP3458A
             y = float(hp.read())
             y0_data.append(y)
             self.test_signal.emit(f'{y}', APPEND)
@@ -40,6 +50,8 @@ def set_dc205_voltage_measure_with_3458a(self, temp):
         if ops == 2:
             dc205.write("volt -100")
             time.sleep(soak)
+            if settings.hp_34401a:
+                hp.write("read?")  # remove this command if use HP3458A
             y = float(hp.read())
             y0_data.append(y)
             self.test_signal.emit(f'{y}', APPEND)
@@ -50,6 +62,8 @@ def set_dc205_voltage_measure_with_3458a(self, temp):
             dc205.write("volt 10")
             dc205.write("sout 1")
             time.sleep(soak)
+            if settings.hp_34401a:
+                hp.write("read?")  # remove this command if use HP3458A
             y = float(hp.read())
             y0_data.append(y)
             self.test_signal.emit(f'{y}', APPEND)
@@ -57,6 +71,8 @@ def set_dc205_voltage_measure_with_3458a(self, temp):
         if ops == 4:
             dc205.write("volt 0")
             time.sleep(soak)
+            if settings.hp_34401a:
+                hp.write("read?")  # remove this command if use HP3458A
             y = float(hp.read())
             y0_data.append(y)
             self.test_signal.emit(f'{y}', APPEND)
@@ -64,6 +80,8 @@ def set_dc205_voltage_measure_with_3458a(self, temp):
         if ops == 5:
             dc205.write("volt -10")
             time.sleep(soak)
+            if settings.hp_34401a:
+                hp.write("read?")  # remove this command if use HP3458A
             y = float(hp.read())
             y0_data.append(y)
             self.test_signal.emit(f'{y}', APPEND)
@@ -74,6 +92,8 @@ def set_dc205_voltage_measure_with_3458a(self, temp):
             dc205.write("volt 1")
             dc205.write("sout 1")
             time.sleep(soak)
+            if settings.hp_34401a:
+                hp.write("read?")  # remove this command if use HP3458A
             y = float(hp.read())
             y0_data.append(y)
             self.test_signal.emit(f'{y}', APPEND)
@@ -81,6 +101,8 @@ def set_dc205_voltage_measure_with_3458a(self, temp):
         if ops == 7:
             dc205.write("volt 0")
             time.sleep(soak)
+            if settings.hp_34401a:
+                hp.write("read?")  # remove this command if use HP3458A
             y = float(hp.read())
             y0_data.append(y)
             self.test_signal.emit(f'{y}', APPEND)
@@ -88,6 +110,8 @@ def set_dc205_voltage_measure_with_3458a(self, temp):
         if ops == 8:
             dc205.write("volt -1")
             time.sleep(soak)
+            if settings.hp_34401a:
+                hp.write("read?")  # remove this command if use HP3458A
             y = float(hp.read())
             y0_data.append(y)
             self.test_signal.emit(f'{y}', APPEND)

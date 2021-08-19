@@ -4,15 +4,17 @@
 import os
 
 INSTRUMENT_CHKLIST = [  'HP3458A',
+                        'HP34401A',
                         'DC205',
-                        #'CS580',
+                        'CS580',
                         'Chamber'
                         ]
 
 HP3458A = 0
-DC205 = 1
-#CS580 = 2
-Chamber = 2
+HP34401A = 1
+DC205 = 2
+CS580 = 3
+Chamber = 4
 
 BUTTON_LIST = [{'label': 'Instruction', 'function': 'InstructionExample'},
                {'label': 'Text input', 'function': 'TextInputExample'},
@@ -52,6 +54,7 @@ APPEND = 'a'
 SERIAL_NUM_WRITE = 1
 
 Data_File_Name = "DC205 Drift_testResult.txt"
+
 
 #
 #   Scavenger related constants below...
